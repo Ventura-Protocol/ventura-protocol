@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: Pledges
@@ -19,7 +19,7 @@ dataSources:
         - Pledge
       abis:
         - name: Pledges
-          file: ./abis/Pledges.json
+          file: Pledges/abis/Pledges.json
       eventHandlers:
         - event: AskSet(indexed bytes32,indexed bytes32,address,indexed uint32)
           handler: handleAskSet
@@ -27,4 +27,4 @@ dataSources:
           handler: handleHandleSet
         - event: PledgeSet(indexed bytes32,indexed uint32,uint256,indexed uint32)
           handler: handlePledgeSet
-      file: ./src/mapping.ts
+      file: Pledges/Pledges.wasm

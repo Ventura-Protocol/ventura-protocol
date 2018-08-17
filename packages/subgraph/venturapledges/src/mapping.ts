@@ -1,21 +1,20 @@
 import { BigInt } from "@graphprotocol/graph-ts"
 import {
-  Pledges,
   AskSet,
   HandleSet,
   PledgeSet
 } from "../generated/Pledges/Pledges"
-import { ExampleEntity } from "../generated/schema"
+import { Ask } from "../generated/schema"
 
 export function handleAskSet(event: AskSet): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
+  let entity = Ask.load(event.transaction.from.toHex())
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
   if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
+    entity = new Ask(event.transaction.from.toHex())
 
     // Entity fields can be set using simple assignments
     entity.count = BigInt.fromI32(0)
@@ -27,6 +26,8 @@ export function handleAskSet(event: AskSet): void {
   // Entity fields can be set based on event parameters
   entity.handle = event.params.handle
   entity.cid = event.params.cid
+  entity.token = event.params.token
+  entity.index = event.params.id
 
   // Entities can be written to the store with `.save()`
   entity.save()
