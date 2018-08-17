@@ -1,0 +1,138 @@
+[
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "handle",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "cid",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "id",
+        "type": "uint32"
+      }
+    ],
+    "name": "AskSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "handle",
+        "type": "bytes32"
+      }
+    ],
+    "name": "HandleSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "handle",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "ask",
+        "type": "uint32"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "pledgeAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint32",
+        "name": "id",
+        "type": "uint32"
+      }
+    ],
+    "name": "PledgeSet",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "_handle", "type": "bytes32" },
+      { "internalType": "bytes32", "name": "_cid", "type": "bytes32" },
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "uint256", "name": "_pledgeAmount", "type": "uint256" }
+    ],
+    "name": "addAsk",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "_handle", "type": "bytes32" },
+      { "internalType": "uint32", "name": "_ask", "type": "uint32" },
+      { "internalType": "uint256", "name": "_pledgeAmount", "type": "uint256" }
+    ],
+    "name": "addPledge",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "_handle", "type": "bytes32" },
+      { "internalType": "uint32", "name": "_ask", "type": "uint32" }
+    ],
+    "name": "getAsk",
+    "outputs": [
+      { "internalType": "bytes32", "name": "cid", "type": "bytes32" },
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "uint256", "name": "totalAmount", "type": "uint256" },
+      { "internalType": "uint32", "name": "totalPledges", "type": "uint32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "bytes32", "name": "_handle", "type": "bytes32" },
+      { "internalType": "uint32", "name": "_ask", "type": "uint32" },
+      { "internalType": "uint32", "name": "_pledge", "type": "uint32" }
+    ],
+    "name": "getPledge",
+    "outputs": [
+      { "internalType": "address", "name": "addr", "type": "address" },
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "name": "handles",
+    "outputs": [
+      { "internalType": "uint32", "name": "totalAsks", "type": "uint32" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
