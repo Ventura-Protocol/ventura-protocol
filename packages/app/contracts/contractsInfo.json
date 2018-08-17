@@ -1,9 +1,9 @@
 {
-  "name": "hardhat",
-  "chainId": "31337",
+  "name": "polygon",
+  "chainId": "137",
   "contracts": {
     "Pledges": {
-      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "address": "0x2e912E9e6Db6402037670Ae00b354DE310824D22",
       "abi": [
         {
           "anonymous": false,

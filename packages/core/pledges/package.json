@@ -12,16 +12,18 @@
     "test": "hardhat test",
     "dev": "run-p hh:node hh:deploy",
     "hh:node": "hardhat node",
-    "hh:deploy": "hardhat deploy --export ../../app/contracts/contractsInfo.json"
+    "hh:deploy": "hardhat deploy --export ../../app/contracts/contractsInfo.json",
+    "hh:deploy-polygon": "hardhat deploy --export ../../app/contracts/contractsInfo.json --network polygon"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@^0.3.0-beta.10",
+    "dotenv": "^10.0.0",
     "ethers": "^5.4.3",
     "hardhat": "^2.5.0",
     "hardhat-deploy": "^0.8.11",
-    "ts-node": "^10.1.0",
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "^4.1.5",
+    "ts-node": "^10.1.0"
   }
 }

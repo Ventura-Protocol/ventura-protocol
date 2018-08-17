@@ -15,3 +15,5 @@ In app folder `npm run dev` command start up next.js.
 To make smart contract work with *metamask* you need to go into advanced and click on Reset account, as otherwise you will get an error regarding nonce being not at 0.
 
 Currently only the save button on the bottom of the page works, and produces 2 transactions to save an "Ask" and create an additonal "Pledge", results of which should appear in the Chrome dev console.
+#### Polygon
+The contract is live on Polygon on the address `0x2e912E9e6Db6402037670Ae00b354DE310824D22`
