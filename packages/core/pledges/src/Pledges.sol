@@ -24,14 +24,18 @@ contract Pledges {
     
     mapping(bytes32 => Handle) public handles;
     
+    event HandleSet(bytes32 indexed handle);
+    event AskSet(bytes32 indexed handle, bytes32 indexed cid, address indexed token);
+    event PledgeSet(bytes32 indexed handle, uint32 indexed ask, uint indexed pledgeAmount);
+    
     function addAsk(bytes32 _handle, bytes32 _cid, address _token, uint _pledgeAmount) public {
         bytes32 askHash = keccak256(abi.encodePacked(_cid, _token));
         uint32 totalAsks = handles[_handle].totalAsks;
         //checking that this combination of cid and token hasn't existed before (don't want people creating duplicates)
         require(handles[_handle].asksByAskHash[askHash] == 0);
         
-        if (handles[_handle].totalAsks == 0) {
-            //TODO: create handle event
+        if (totalAsks == 0) {
+            emit HandleSet(_handle);
         }
         
         // creating Ask
@@ -48,6 +52,9 @@ contract Pledges {
         // creating/updating Handle
         handles[_handle].asksByAskHash[askHash] = totalAsks + 1;
         handles[_handle].totalAsks++;
+        
+        emit AskSet(_handle, _cid, _token);
+        emit PledgeSet(_handle, 1, _pledgeAmount);
     }
     
     function addPledge(bytes32 _handle, uint32 _ask, uint _pledgeAmount) public {
@@ -78,7 +85,8 @@ contract Pledges {
         handles[_handle].asks[_ask].pledgesByAddress[msg.sender] = totalPledges + 1;
         handles[_handle].asks[_ask].totalPledges++;
         
-        // TODO: create pledge event
+        // event for EVM logging
+        emit PledgeSet(_handle, _ask, _pledgeAmount);
     }
     
     function getAsk(bytes32 _handle, uint32 _ask) public view returns 
