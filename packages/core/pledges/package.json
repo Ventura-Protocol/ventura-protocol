@@ -8,7 +8,7 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "node": "hardhat node",
-    "deploy": "hardhat deploy --export contractsInfo.json",
+    "deploy": "hardhat deploy --export ../../app/contracts/contractsInfo.json"
   },
   "author": "",
   "license": "ISC",

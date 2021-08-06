@@ -15,6 +15,8 @@ import {
   walletconnect,
   walletlink,
 } from '../connectors'
+import NewAsk from '../components/form/new-ask';
+
 
 const Spinner = () => <span>Loading...</span>;
 
@@ -52,14 +54,6 @@ function getLibrary(provider: any): Web3Provider {
   const library = new Web3Provider(provider)
   library.pollingInterval = 12000
   return library
-}
-
-export default function() {
-  return (
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <App />
-    </Web3ReactProvider>
-  )
 }
 
 function ChainId() {
@@ -379,6 +373,25 @@ function App() {
           </button>
         )}
       </div>
+      <div style={{
+          display: 'grid',
+          gridGap: '1rem',
+          gridTemplateColumns: 'fit-content',
+          maxWidth: '20rem',
+          margin: 'auto'
+        }}>
+        <NewAsk />
+      </div>
     </>
   )
 }
+function WrappedApp() {
+  return (
+    <Web3ReactProvider getLibrary={getLibrary}>
+      <App />
+    </Web3ReactProvider>
+  )
+}
+
+
+export default WrappedApp;
