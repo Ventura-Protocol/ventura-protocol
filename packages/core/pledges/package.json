@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": ">=14.17.1"
+  },
   "scripts": {
     "clean": "hardhat clean",
     "compile": "hardhat compile",
