@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { Web3Provider } from '@ethersproject/providers'
+import { Web3Provider, TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
+import { formatEther, parseUnits } from '@ethersproject/units'
 import contractsInfo from '../../contracts/contractsInfo.json';
 import { useContract } from '../../hooks/useContracts'
+import { stringToDataHexString, dataHexStringToString } from '../../utils/bytes';
 
 const NewAsk = () => {
     const context = useWeb3React<Web3Provider>()
@@ -12,70 +14,60 @@ const NewAsk = () => {
     // check for the right chain ID and don't load contract from the whonf chain
 
     const contract = useContract(contractsInfo.contracts.Pledges.address, contractsInfo.contracts.Pledges.abi);
+    
+    useEffect(()=>{
+        // listening for an Ask event
+        contract?.on('AskSet', (handle,cid,token)=> console.log('ask event', dataHexStringToString(handle),cid,token));
+        return function cleanup() {
+            contract?.removeAllListeners();
+        }
+    }, [contract]);
 
-    const handleSubmit = (e) => {
+    const [currentHandle, setCurrentHandle] = useState<string>('');
+
+    const handleSubmit = (e: any) => {
         e.preventDefault();
+        const form = e.target
+        const askFormValues = {
+            handle: form.querySelector("input[name='handle']").value,
+            description: form.querySelector("textarea[name='description']").value,
+            token: form.querySelector("input[name='token']").value,
+            amount: parseUnits(form.querySelector("input[name='amount']").value),
+        }
 
-        const handle = '0x6161613030303030303030303030303030303030303030303030303030303035'; //bytes32
+        const handle = stringToDataHexString(currentHandle) //bytes32
         const cid = '0x2400000000000000000000000000000000000000000000000000000000000000'; //bytes32
-        const tokenAddr = '0x4444aD20879051B696A1C14cCF6e3B0459466666' // address, USDC or WETH for example
 
-        // some example transactions
-        Promise.resolve()
-        .then(
-            ()=>contract?.addAsk(
+        contract?.addAsk(
                 handle,
                 cid,
-                tokenAddr,
-                '100'
+                askFormValues.token,
+                askFormValues.amount,
             )
-        )
-        .then(
-            ()=>contract?.addPledge(
-                handle,
-                1,
-                '110'
-            )
-        )
-        .then(
-            ()=>contract?.handles(handle)
-        )
-        .then(console.log)
-        .then(
-            ()=>contract?.getAsk(
-                handle,
-                1,
-            )
-        )
-        .then(console.log)
-        .then(
-            ()=>contract?.getPledge(
-                handle,
-                1,
-                1
-            )
-        )
-        .then(console.log);
+        .then((transactionResponse: TransactionResponse)=> transactionResponse.wait())
+        .then((res: TransactionReceipt) => alert('Transaction was mined'))
+        .catch(console.error);
     }
 
     return(
         <div>
-            <pre>Asking _________ for</pre>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="handle">Handle</label>
-                    <input type="text" id="handle" name="handle" />
+                    <input type="text" id="handle" name="handle" onChange={e=> { 
+                        setCurrentHandle(e.target.value);
+                    }} value={currentHandle} />
                 </div>
-                <textarea defaultValue="An NFT of ..."></textarea>
+                <textarea name="description" defaultValue="An NFT of ..."></textarea>
                 <div>
-                    <label htmlFor="token">Token</label>
-                    <input type="text" id="token" name="token" />
+                    <label htmlFor="token">Token <br />(Default Kovan WETH)<br /></label>
+                    <input type="text" id="token" name="token" defaultValue="0xd0a1e359811322d97991e03f863a0c30c2cf029c" />
                 </div>
                 <div>
                     <label htmlFor="amount">Amount</label>
-                    <input type="number" id="amount" name="amount" />
+                    <input type="number" id="amount" name="amount" defaultValue="0.00001" />
                 </div>
-                <button onClick={handleSubmit} type="submit">Save</button>
+                <button type="submit">Send</button>
             </form>
         </div>
     )
