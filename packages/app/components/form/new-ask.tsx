@@ -3,10 +3,12 @@ import { useWeb3React } from '@web3-react/core'
 import { Web3Provider, TransactionResponse, TransactionReceipt } from '@ethersproject/providers'
 import { formatEther, parseUnits } from '@ethersproject/units'
 import contractsInfo from '../../contracts/contractsInfo.json';
-import { useContract } from '../../hooks/useContracts'
+import { useContract } from '../../hooks/usecontracts'
+import { useModals } from '../../hooks/usemodals';
 import { stringToDataHexString, dataHexStringToString } from '../../utils/bytes';
 
 const NewAsk = () => {
+    const { pushModal, popModal, popAllModals } = useModals();
     const context = useWeb3React<Web3Provider>()
     // const { connector, library, chainId, account, activate, deactivate, active, error } = context
     const { chainId } = context
@@ -69,6 +71,9 @@ const NewAsk = () => {
                 </div>
                 <button type="submit">Send</button>
             </form>
+            <button onClick={
+                ()=>pushModal(<div onClick={popModal}>test modal content (click to close)</div>, { overlay: true })
+            }>Modal open</button>
         </div>
     )
 }
