@@ -1,6 +1,7 @@
 import React from 'react'
 import WalletComponents from '../components/wallet';
-import NewAsk from '../components/form/new-ask';
+import AsksList from '../components/asks-list';
+import DetailPane from '../components/detail-pane';
 
 function Page() {
   return (
@@ -9,15 +10,9 @@ function Page() {
         flexDirection: 'row',
         justifyContent: 'space-between',
       }}>
-        <div><WalletComponents /></div>
-        <div>
-          <p>Content</p>
-          <p>Content</p>
-          <p>Content</p>
-        </div>
-        <div>
-          <NewAsk />
-        </div>
+        <WalletComponents />
+        <AsksList />
+        <DetailPane />
       </div>
   )
 }

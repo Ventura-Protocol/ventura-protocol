@@ -210,7 +210,7 @@ function getErrorMessage(error: Error) {
     useInactiveListener(!triedEager || !!activatingConnector)
   
     return (
-      <>
+      <div>
         <Header />
         <hr style={{ margin: '2rem' }} />
         <div
@@ -365,7 +365,7 @@ function getErrorMessage(error: Error) {
             </button>
           )}
         </div>
-      </>
+      </div>
     )
   }
   

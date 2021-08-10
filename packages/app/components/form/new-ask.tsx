@@ -6,20 +6,25 @@ import contractsInfo from '../../contracts/contractsInfo.json';
 import { useContract } from '../../hooks/usecontracts'
 import { useModals } from '../../hooks/usemodals';
 import { stringToDataHexString, dataHexStringToString } from '../../utils/bytes';
+import { useAppState } from "../../hooks/useappstate";
 
 const NewAsk = () => {
     const { pushModal, popModal, popAllModals } = useModals();
     const context = useWeb3React<Web3Provider>()
+    const { Asks } = useAppState();
     // const { connector, library, chainId, account, activate, deactivate, active, error } = context
     const { chainId } = context
     
-    // check for the right chain ID and don't load contract from the whonf chain
+    // check for the right chain ID and don't load contract from the wrong chain
 
     const contract = useContract(contractsInfo.contracts.Pledges.address, contractsInfo.contracts.Pledges.abi);
     
     useEffect(()=>{
         // listening for an Ask event
-        contract?.on('AskSet', (handle,cid,token)=> console.log('ask event', dataHexStringToString(handle),cid,token));
+        // console.log('hook rerun', contract);
+        if (contract) {  
+            contract?.on('AskSet', (handle,cid,token)=> console.log('ask event', dataHexStringToString(handle),cid,token));
+        }
         return function cleanup() {
             contract?.removeAllListeners();
         }
@@ -74,6 +79,10 @@ const NewAsk = () => {
             <button onClick={
                 ()=>pushModal(<div onClick={popModal}>test modal content (click to close)</div>, { overlay: true })
             }>Modal open</button>
+
+            
+            <button onClick={()=>Asks.set(current=> (['new', ...current]))}>Add</button>
+
         </div>
     )
 }
