@@ -19,6 +19,7 @@
     "@ethersproject/providers": "^5.1.2",
     "@ethersproject/units": "^5.1.0",
     "@headlessui/react": "^1.4.0",
+    "@uniswap/default-token-list": "^2.0.0",
     "@web3-react/abstract-connector": "latest",
     "@web3-react/core": "latest",
     "@web3-react/injected-connector": "latest",
