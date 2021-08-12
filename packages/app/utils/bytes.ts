@@ -11,7 +11,7 @@ const dataHexStringToString = (dataHexString: string, strictSanitize: boolean = 
     const chars = Array.from(arrayify(dataHexString));
     const str = String.fromCharCode(...chars);
     if (strictSanitize) {
-        return str.replace(/[^A-Za-z0-9]/g, '');
+        return str.replace(/[^A-Za-z0-9\:]/g, '');
     }
     return str;
 }

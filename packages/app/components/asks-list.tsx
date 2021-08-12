@@ -10,6 +10,7 @@ import { useContract } from '../hooks/usecontracts'
 import { dataHexStringToString } from '../utils/bytes';
 import AskFlowStart from './ask-flow-start';
 import { tokenForAddress } from '../utils/tokens';
+import Avatar from './avatar';
 
 const AsksList = () => {
     const context = useWeb3React<Web3Provider>()
@@ -19,9 +20,10 @@ const AsksList = () => {
     const contract = useContract(contractsInfo.contracts.Pledges.address, contractsInfo.contracts.Pledges.abi);
     useEffect(()=>{
         contract?.on('AskSet', (handle,cid,token,id,fullEvent)=> {
+            const decodedHandle = dataHexStringToString(handle);
             const newAsk = {
                 txHash: fullEvent.transactionHash,
-                handle: dataHexStringToString(handle),
+                handle: decodedHandle,
                 cid,
                 token,
                 id,
@@ -42,14 +44,16 @@ const AsksList = () => {
 
     return(
       <div>
+        
         <AskFlowStart />
         {Asks.itself.map(each => {
             const token = tokenForAddress(each.token, chainId)
             return(
             <div key={each.txHash}>   
-                <div>Content: {each.handle}</div>
+                <div>Content: {each.handle.split(':')[1]}</div>
                 <div><Link href={`/${each.handle}/${each.id}`}>see details</Link></div>
-                <Image src={token.logoURI} alt="token" width={100} height={100} />
+                <Image src={token.logoURI} alt="token" width={50} height={50} />
+                <Avatar multiHandle={each.handle} />
             </div>
             )
         })}
