@@ -1,21 +1,25 @@
 import React from 'react'
-import WalletComponents from '../components/wallet';
+import styled from 'styled-components';
+import StatsPane from '../components/stats-pane';
 import AsksList from '../components/asks-list';
 import DetailPane from '../components/detail-pane';
 
+const StyledPage = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  height: 100vh;
+`;
+
 function Page() {
   return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-      }}>
-        <WalletComponents />
+      <StyledPage>
+        <StatsPane />
         <AsksList />
         <DetailPane />
-      </div>
+      </StyledPage>
   )
 }
-
 
 export default Page;

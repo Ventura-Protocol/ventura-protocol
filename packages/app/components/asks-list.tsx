@@ -1,5 +1,6 @@
 
 import { useEffect } from 'react';
+import styled from 'styled-components';
 import Link from 'next/link'
 import Image from 'next/image'
 import { useWeb3React } from '@web3-react/core'
@@ -11,6 +12,25 @@ import { dataHexStringToString } from '../utils/bytes';
 import AskFlowStart from './ask-flow-start';
 import { tokenForAddress } from '../utils/tokens';
 import Avatar from './avatar';
+
+const StyledAsksList = styled.div`
+    background-color: white;
+    width: 100%;
+    overflow-x: scroll;
+`;
+
+const StyledAsk = styled.div`
+    border: 2px dotted black;
+    cursor: pointer;
+    padding: 10px;
+    &:hover {
+        background-color: #ff6300;
+    }
+`;
+
+const Flex = styled.div`
+    display: flex;
+`;
 
 const AsksList = () => {
     const context = useWeb3React<Web3Provider>()
@@ -27,13 +47,14 @@ const AsksList = () => {
                 cid,
                 token,
                 id,
+                chainId
             };
             // required to avoid strange bug with 2 events being detected instead of one.
             const includesTx = TxHashes.itself.has(fullEvent.transactionHash);
             if (!includesTx) {
                 Asks.set(current => {
                     TxHashes.itself.add(fullEvent.transactionHash);
-                    return ([newAsk, ...current]);
+                    return ([newAsk,...current]);
                 });
             }
         }); 
@@ -43,21 +64,23 @@ const AsksList = () => {
     }, [contract]);
 
     return(
-      <div>
-        
+      <StyledAsksList>
         <AskFlowStart />
         {Asks.itself.map(each => {
-            const token = tokenForAddress(each.token, chainId)
+            const token = tokenForAddress(each.token, each.chainId)
             return(
-            <div key={each.txHash}>   
-                <div>Content: {each.handle.split(':')[1]}</div>
-                <div><Link href={`/${each.handle}/${each.id}`}>see details</Link></div>
-                <Image src={token.logoURI} alt="token" width={50} height={50} />
-                <Avatar multiHandle={each.handle} />
-            </div>
+            <Link href={`/${each.handle}/${each.id}`}>
+                <StyledAsk key={each.txHash}>  
+                    <div>Content: {each.handle.split(':')[1]}</div>
+                    <Flex>
+                        {token && <Image src={token.logoURI} alt="token" width={50} height={50} />}
+                        <Avatar multiHandle={each.handle} />
+                    </Flex>
+                </StyledAsk>
+            </Link>
             )
         })}
-      </div>
+      </StyledAsksList>
     )
 }
 
