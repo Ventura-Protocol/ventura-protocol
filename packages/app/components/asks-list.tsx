@@ -14,15 +14,16 @@ import { tokenForAddress } from '../utils/tokens';
 import Avatar from './avatar';
 
 const StyledAsksList = styled.div`
-    background-color: white;
     width: 100%;
-    overflow-x: scroll;
+    overflow-y: scroll;
+    padding: 10px;
 `;
 
 const StyledAsk = styled.div`
     border: 2px dotted black;
     cursor: pointer;
     padding: 10px;
+    
     &:hover {
         background-color: #ff6300;
     }
@@ -70,6 +71,7 @@ const AsksList = () => {
             const token = tokenForAddress(each.token, each.chainId)
             return(
             <Link href={`/${each.handle}/${each.id}`}>
+                <a>
                 <StyledAsk key={each.txHash}>  
                     <div>Content: {each.handle.split(':')[1]}</div>
                     <Flex>
@@ -77,6 +79,7 @@ const AsksList = () => {
                         <Avatar multiHandle={each.handle} />
                     </Flex>
                 </StyledAsk>
+                </a>
             </Link>
             )
         })}

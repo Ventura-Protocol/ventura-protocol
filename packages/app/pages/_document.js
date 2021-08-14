@@ -1,4 +1,4 @@
-import Document, { Head, Main, NextScript, Html } from 'next/document';
+import Document, { Head, Main, NextScript, Html, Title } from 'next/document';
 // Import styled components ServerStyleSheet
 import { ServerStyleSheet } from 'styled-components';
 
@@ -23,9 +23,11 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <title>Ventura Protocol</title>
           {/* Step 5: Output the styles in the head  */}
           {this.props.styleTags}
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+            <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet" />
         </Head>
         <body>
           <Main />

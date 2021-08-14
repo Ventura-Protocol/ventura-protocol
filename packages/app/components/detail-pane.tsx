@@ -8,9 +8,11 @@ import { useContract } from '../hooks/usecontracts'
 import { stringToDataHexString, dataHexStringToString } from '../utils/bytes';
 
 const StyledDetailPane = styled.div`
-    background-color: rebeccapurple;
     width: 100%;
-    overflow-x: scroll;
+    overflow-y: auto;
+    background-color: rgb(200 200 200 / 30%);
+    display: flex;
+    padding: 10px;
 `;
 
 const EmptyState = () => (
@@ -41,7 +43,7 @@ const DetailPane = () => {
     if (ask) {
         return(
             <StyledDetailPane>
-                Ask: {ask.totalPledges}
+                    <p>Ask: {ask.totalPledges}</p>
             </StyledDetailPane>
         )
     }

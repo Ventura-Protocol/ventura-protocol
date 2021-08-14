@@ -10,6 +10,10 @@ const StyledPage = styled.div`
   justify-content: space-between;
   flex-wrap: nowrap;
   height: 100vh;
+  @media (max-width: 468px) {
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
 `;
 
 function Page() {

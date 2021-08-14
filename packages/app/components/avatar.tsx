@@ -19,7 +19,7 @@ const Avatar = ({multiHandle, size = 50} : { multiHandle: string, size?: number 
     },[handle]);
     
     const style = {
-        borderRadius: imageUrl ? '50%' : '0%',
+        borderRadius: imageUrl || network === 'TW' ? '50%' : '0%',
         width: size,
         height: size,
         position: 'relative',
@@ -29,9 +29,9 @@ const Avatar = ({multiHandle, size = 50} : { multiHandle: string, size?: number 
     return(
         <div style={style}>
             {imageUrl 
-            ? <Image src={imageUrl} layout="fill" alt='twitter avatar' /> 
+            ? <Image src={imageUrl} layout="fill" alt='twitter avatar' />
             : network === 'TW' 
-                ? <Image src="/tw_logo.svg" layout="fill" alt='twitter logo' />
+                ? <Image src="/loading.gif" layout="fill" alt='twitter logo' />
                 : <Image src="/ig_logo.svg" layout="fill" alt='instagram logo' />}
         </div>
         
