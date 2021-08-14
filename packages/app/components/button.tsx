@@ -3,10 +3,10 @@ import styled from 'styled-components';
 const StyledButton = styled.button`
     border-radius: 3px;
     position: relative;
-    border 1px solid white;
+    border: ${({dark})=>!dark ? `1px solid white`:`1px solid #5b00ff`};
     padding: 10px;
     background: transparent;
-    color: white;
+    color: ${({dark})=>!dark ? `white`:`#5b00ff`};
     font-weight: bold;
     cursor: pointer;
     &:hover {
@@ -21,13 +21,13 @@ const InnerBox = styled.div`
     left: 2px;
     right: 2px;
     bottom: 2px;
-    border 1px solid white;
+    border: ${({dark})=>!dark ? `1px solid white`:`1px solid #5b00ff`};
 `
 
-const Button = ({size, children, ...rest} : {size: number, children: any}) => {
+const Button = ({size, dark, children, ...rest} : {size: number, dark: boolean, children: any}) => {
     return(
-        <StyledButton {...rest}>
-            <InnerBox></InnerBox>
+        <StyledButton dark={dark} {...rest}>
+            <InnerBox dark={dark}></InnerBox>
             {children}
         </StyledButton>
     )

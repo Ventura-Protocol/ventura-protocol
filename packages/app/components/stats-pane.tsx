@@ -54,7 +54,7 @@ const StyledStatsPane = styled.div`
 
 `;
 
-const SubLogo = styled.div`
+const SubLogo = styled.h1`
     font-family: 'Permanent Marker', monospace;
     font-size: 40px;
     color: white;
