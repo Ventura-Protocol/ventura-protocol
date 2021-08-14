@@ -24,42 +24,45 @@ contract Pledges {
     struct Handle {
         uint32 totalAsks;
         mapping(uint32 => Ask) asks;
-        mapping(bytes32 => uint32) asksByAskHash;
+        mapping(bytes32 => bool) asksByAskHash;
     }
     
     mapping(bytes32 => Handle) public handles;
     
     event HandleSet(bytes32 indexed handle);
-    event AskSet(bytes32 indexed handle, bytes32 indexed cid, address indexed token);
-    event PledgeSet(bytes32 indexed handle, uint32 indexed ask, uint indexed pledgeAmount);
+    event AskSet(bytes32 indexed handle, bytes32 indexed cid, address token, uint32 indexed id);
+    event PledgeSet(bytes32 indexed handle, uint32 indexed ask, uint pledgeAmount, uint32 indexed id);
     
     function addAsk(bytes32 _handle, bytes32 _cid, address _token, uint _pledgeAmount) public {
         bytes32 askHash = keccak256(abi.encodePacked(_cid, _token));
         uint32 totalAsks = handles[_handle].totalAsks;
         //checking that this combination of cid and token hasn't existed before (don't want people creating duplicates)
-        require(handles[_handle].asksByAskHash[askHash] == 0);
+        require(handles[_handle].asksByAskHash[askHash] == false);
         
         if (totalAsks == 0) {
             emit HandleSet(_handle);
         }
         
+        // total asks for a handle
+        totalAsks++;
+
         // creating Ask
-        handles[_handle].asks[1].cid = _cid;
-        handles[_handle].asks[1].token= _token;
-        handles[_handle].asks[1].totalAmount = _pledgeAmount;
-        handles[_handle].asks[1].pledgesByAddress[msg.sender] = 1;
-        handles[_handle].asks[1].totalPledges = 1;
+        handles[_handle].asks[totalAsks].cid = _cid;
+        handles[_handle].asks[totalAsks].token= _token;
+        handles[_handle].asks[totalAsks].totalAmount = _pledgeAmount;
+        handles[_handle].asks[totalAsks].pledgesByAddress[msg.sender] = 1;
+        handles[_handle].asks[totalAsks].totalPledges = 1;
         
-        // creating Pledge
-        handles[_handle].asks[1].pledges[1].addr = msg.sender;
-        handles[_handle].asks[1].pledges[1].amount = _pledgeAmount;
+        // creating Pledge (index 1 because new ask has no pledges yet)
+        handles[_handle].asks[totalAsks].pledges[1].addr = msg.sender;
+        handles[_handle].asks[totalAsks].pledges[1].amount = _pledgeAmount;
         
         // creating/updating Handle
-        handles[_handle].asksByAskHash[askHash] = totalAsks + 1;
-        handles[_handle].totalAsks++;
+        handles[_handle].asksByAskHash[askHash] = true;
+        handles[_handle].totalAsks = totalAsks;
         
-        emit AskSet(_handle, _cid, _token);
-        emit PledgeSet(_handle, 1, _pledgeAmount);
+        emit AskSet(_handle, _cid, _token, totalAsks);
+        emit PledgeSet(_handle, totalAsks, _pledgeAmount, 1);
     }
     
     function addPledge(bytes32 _handle, uint32 _ask, uint _pledgeAmount) public {
@@ -91,7 +94,7 @@ contract Pledges {
         handles[_handle].asks[_ask].totalPledges++;
         
         // event for EVM logging
-        emit PledgeSet(_handle, _ask, _pledgeAmount);
+        emit PledgeSet(_handle, _ask, _pledgeAmount, pledgeIndex);
     }
     
     function getAsk(bytes32 _handle, uint32 _ask) public view returns 
