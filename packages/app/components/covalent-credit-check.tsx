@@ -3,8 +3,8 @@ import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components';
 import Button from './button';
 import { tokenForAddress } from '../utils/tokens';
-import { BigNumber } from '@ethersproject/bignumber'
-import { formatEther, commify } from '@ethersproject/units';
+import { BigNumber, FixedNumber } from '@ethersproject/bignumber'
+import { formatEther, commify, formatUnits } from '@ethersproject/units';
 
 const Title = styled.h2`
     font-family: 'Permanent Marker', monospace;
@@ -54,15 +54,15 @@ const CovalentCreditCheck = (props: any) => {
                 </thead>
                 <tbody>
                     {supportedTokens && supportedTokens.map(each=>{
-                        if (each.quote && each.quote_24h) {
+
                             return(
                                 <tr>
                                     <td>{each.contract_ticker_symbol}</td>
-                                    <td>{commify(each.quote)}</td>
-                                    <td>{commify(each.quote_24h)}</td>
+                                    <td>{FixedNumber.from(formatUnits(BigNumber.from(each.balance), each.contract_decimals)).round(4).toString()}</td>
+                                    <td>{FixedNumber.from(formatUnits(BigNumber.from(each.balance_24h), each.contract_decimals)).round(4).toString()}</td>
                                 </tr>
                                 );
-                        }
+                        
                     })}
                 </tbody>
             </table>
