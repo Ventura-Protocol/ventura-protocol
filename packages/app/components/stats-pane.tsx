@@ -99,6 +99,7 @@ const WalletConnection = () => {
 }
 
 const StatsPane = () => {
+    const { account } = useWeb3React<Web3Provider>()
     const { pushModal } = useModals()
     return(
 
@@ -115,12 +116,13 @@ const StatsPane = () => {
                 </a>
             </Link>
             <SubLogo>Ventura Protocol</SubLogo>
-            <p>Crowdsourced NFT and digital memorabilia wishlist</p>
-            <p>
-                <WalletConnection />
+            <p style={{margin: '10px 0px'}}>Crowdsourced NFT and digital memorabilia wishlist</p>
+            <p style={{margin: '10px 0px'}}>
+                {account && <span style={{background: '#ffffffb5'}}>{`${account.slice(0, 6)}...${account.substring(account.length - 4)}`}</span>}
             </p>
             
-            <Button onClick={()=>pushModal(<Modal />)}>Connect Wallet</Button>
+            <Button onClick={()=>pushModal(<Modal />)}>Your Wallet</Button>
+            <WalletConnection />
         </StyledStatsPane>
     )
 }

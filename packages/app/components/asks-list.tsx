@@ -1,7 +1,9 @@
 
-import { useEffect } from 'react';
+import { useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link'
+import Svg from './svg-patterns';
+import { encode } from "universal-base64";
 import Image from 'next/image'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
@@ -20,17 +22,43 @@ const StyledAsksList = styled.div`
 `;
 
 const StyledAsk = styled.div`
-    border: 2px dotted black;
     cursor: pointer;
+    margin: -10px -10px 0px -10px;
     padding: 10px;
     
     &:hover {
-        background-color: #ff6300;
+        background-color: rgb(91,0,255,0.20);
+        background-image: ${
+            ()=>`url("data:image/svg+xml;base64,${encode(
+                Svg({ color: '#FFFFFF', density: 3, opacity: 0.7 })
+            )}")`}
     }
+`;
+
+const Divider = styled.div`
+height: 20px;
+margin: 0px -10px 10px -10px;
+background-image: ${
+    ()=>`url("data:image/svg+xml;base64,${encode(
+        Svg({ color: '#000000', density: 3, opacity: 1 })
+    )}")`}
 `;
 
 const Flex = styled.div`
     display: flex;
+`;
+
+const ContentWrap = styled.p`
+    overflow: hidden;
+    white-space: break-spaces;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    hyphens: auto;
+    overflow-wrap: break-word;
+    height: 50px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 `;
 
 const AsksList = () => {
@@ -70,19 +98,38 @@ const AsksList = () => {
         {Asks.itself.map(each => {
             const token = tokenForAddress(each.token, each.chainId)
             return(
-            <Link href={`/${each.handle}/${each.id}`}>
-                <a>
-                <StyledAsk key={each.txHash}>  
-                    <div>Content: {each.handle.split(':')[1]}</div>
-                    <Flex>
-                        {token && <Image src={token.logoURI} alt="token" width={50} height={50} />}
-                        <Avatar multiHandle={each.handle} />
-                    </Flex>
-                </StyledAsk>
-                </a>
-            </Link>
+            <Fragment>
+                <Link href={`/${each.handle}/${each.id}`}>
+                    <a>
+                    <StyledAsk key={each.txHash}>
+                        <Flex>
+                            <div style={{borderRight: '1px solid black', paddingRight: '5px', marginRight: '5px'}}>
+                                <div style={{position: 'relative', height: '30px', width: '30px'}}>
+                                    <Image src="/polygon-matic-logo.svg" layout="fill" alt="polygon" />
+                                </div>
+                                {token && <Image src={token.logoURI} alt="token" width={30} height={30} />}
+                            </div>
+                            <div>
+
+                            </div>
+                            <div>
+                                <p>Asking <strong style={{fontWeight: 'bold'}}>@{each.handle.split(':')[1]}</strong> for</p>
+                                <ContentWrap>
+                                    {'content:' + each.cid + each.cid}
+                                </ContentWrap>
+                            </div>
+                            <div style={{marginLeft: 'auto'}}>
+                                <Avatar multiHandle={each.handle} />
+                            </div>
+                        </Flex>
+
+                    </StyledAsk>
+                    </a>
+                </Link>
+                <Divider></Divider>
+            </Fragment>
             )
-        })}
+        })} 
       </StyledAsksList>
     )
 }

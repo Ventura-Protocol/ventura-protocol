@@ -48,19 +48,13 @@ const DetailPane = () => {
         )
     }
 
-    if (!path) {
+    if (!path || !ask) {
         return(
-            <StyledDetailPane>
+            <StyledDetailPane style={{ display: 'flex', alignItems: 'center', textAlign: 'center', color: 'white'}}>
                 <EmptyState />
             </StyledDetailPane>
         )
     }
-
-    return(
-        <StyledDetailPane>
-            <DefaultErrorPage statusCode={404} />
-        </StyledDetailPane>
-    )
 }
 
 export default DetailPane;

@@ -23,7 +23,7 @@ const NewAsk = ({currentHandle}: {currentHandle: string}) => {
         // listening for an Ask event
         // console.log('hook rerun', contract);
         if (contract) {  
-            contract?.on('AskSet', (handle,cid,token)=> console.log('ask event', dataHexStringToString(handle),cid,token));
+            contract?.on('AskSet', (handle,cid,token, ...rest)=> console.log('ask event', dataHexStringToString(handle),cid,token, rest));
         }
         return function cleanup() {
             contract?.removeAllListeners();
@@ -34,7 +34,6 @@ const NewAsk = ({currentHandle}: {currentHandle: string}) => {
         e.preventDefault();
         const form = e.target
         const askFormValues = {
-            handle: form.querySelector("input[name='handle']").value,
             description: form.querySelector("textarea[name='description']").value,
             token: form.querySelector("input[name='token']").value,
             amount: parseUnits(form.querySelector("input[name='amount']").value),
