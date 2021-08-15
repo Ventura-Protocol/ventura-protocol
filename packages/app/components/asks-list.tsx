@@ -98,10 +98,10 @@ const AsksList = () => {
         {Asks.itself.map(each => {
             const token = tokenForAddress(each.token, each.chainId)
             return(
-            <Fragment>
+            <div key={each.txHash}>
                 <Link href={`/${each.handle}/${each.id}`}>
                     <a>
-                    <StyledAsk key={each.txHash}>
+                    <StyledAsk>
                         <Flex>
                             <div style={{borderRight: '1px solid black', paddingRight: '5px', marginRight: '5px'}}>
                                 <div style={{position: 'relative', height: '30px', width: '30px'}}>
@@ -127,7 +127,7 @@ const AsksList = () => {
                     </a>
                 </Link>
                 <Divider></Divider>
-            </Fragment>
+            </div>
             )
         })} 
       </StyledAsksList>
