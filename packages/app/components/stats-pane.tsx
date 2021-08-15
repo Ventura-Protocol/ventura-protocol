@@ -10,6 +10,7 @@ import Svg from './svg-patterns';
 import { Web3Provider } from '@ethersproject/providers'
 import Button from './button';
 import { useEagerConnect, useInactiveListener } from '../hooks'
+import { CloseText } from './layout-helpers';
 import {
     injected,
     network,
@@ -63,8 +64,8 @@ const SubLogo = styled.h1`
 const Modal = () => {
     const { popModal } = useModals();
     return(
-        <div>
-            <div onClick={popModal}>Close X</div>
+        <div style={{position:'relative', paddingTop: '10px'}}>
+            <CloseText onClick={popModal}>close X</CloseText>
             <WalletComponents />
         </div>
     )

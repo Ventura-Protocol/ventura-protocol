@@ -12,8 +12,19 @@ const Margin = styled.div`
     margin: 10px;
 `;
 
+const CloseText = styled.span`
+    font-family: 'Permanent Marker', monospace;
+    font-size: 30px;
+    position: absolute;
+    right: -30px;
+    cursor: pointer;
+    top:-30px;
+    color: rgb(173, 87, 227);
+`;
+
 export {
     Flex,
     Padding,
     Margin,
+    CloseText
 }

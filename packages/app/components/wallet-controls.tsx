@@ -8,6 +8,7 @@ import {
 import { UserRejectedRequestError as UserRejectedRequestErrorWalletConnect } from '@web3-react/walletconnect-connector'
 import { Web3Provider } from '@ethersproject/providers'
 import { formatEther } from '@ethersproject/units'
+import Button from './button';
 
 import { useEagerConnect, useInactiveListener } from '../hooks'
 import {
@@ -235,14 +236,7 @@ function getErrorMessage(error: Error) {
                 const disabled = !triedEager || !!activatingConnector || connected || !!error
     
                 return (
-                <button
-                    style={{
-                    height: '3rem',
-                    borderRadius: '1rem',
-                    borderColor: activating ? 'orange' : connected ? 'green' : 'unset',
-                    cursor: disabled ? 'unset' : 'pointer',
-                    position: 'relative'
-                    }}
+                <Button
                     disabled={disabled}
                     key={name}
                     onClick={() => {
@@ -265,31 +259,27 @@ function getErrorMessage(error: Error) {
                     {activating && <Spinner color={'black'} style={{ height: '25%', marginLeft: '-1rem' }} />}
                     {connected && (
                         <span role="img" aria-label="check">
-                        ✅
+                        ✔︎
                         </span>
                     )}
                     </div>
                     {name}
-                </button>
+                </Button>
                 )
             })}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             {(active || error) && (
-                <button
+                <Button
                 style={{
-                    height: '3rem',
                     marginTop: '2rem',
-                    borderRadius: '1rem',
-                    borderColor: 'red',
-                    cursor: 'pointer'
                 }}
                 onClick={() => {
                     deactivate()
                 }}
                 >
                 Deactivate
-                </button>
+                </Button>
             )}
     
             {!!error && <h4 style={{ marginTop: '1rem', marginBottom: '0' }}>{getErrorMessage(error)}</h4>}

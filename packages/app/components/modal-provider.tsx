@@ -1,5 +1,7 @@
 import { Fragment, useRef, createContext, useContext, useState } from 'react';
 import { Dialog } from '@headlessui/react';
+import Svg from './svg-patterns';
+import { encode } from "universal-base64";
 const Modal = (props: any) => {
 
     const newRef = useRef();
@@ -32,8 +34,16 @@ const Modal = (props: any) => {
             opacity: 0.7,
         },
         Content: {
-            backgroundColor: 'white',
             zIndex: 0,
+            backgroundColor: 'white',
+            backgroundImage: `url("data:image/svg+xml;base64,${encode(
+                    Svg({ color: '#000000', density: 3, opacity: 1 })
+                )}")`
+        },
+        InnerContent: {
+            margin: '20px',
+            padding: '20px',
+            backgroundColor: 'white',
         }
     }
 
@@ -48,9 +58,11 @@ const Modal = (props: any) => {
       >
 
         <div style={styles.Container} className="">
-            {props.overlay && <Dialog.Overlay style={styles.Overlay} className="" />}
-            <div style={styles.Content} className="" ref={!props.initialFocus && initialFocus}>
-                {props.children}
+            {props.overlay && <Dialog.Overlay style={styles.Overlay} className="loading-animation" />}
+            <div style={styles.Content} className="loading-animation">
+                <div style={styles.InnerContent} className="" ref={!props.initialFocus && initialFocus}>
+                    {props.children}
+                </div>
             </div>
         </div>
     </Dialog>

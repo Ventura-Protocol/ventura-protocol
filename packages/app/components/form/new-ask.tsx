@@ -8,7 +8,7 @@ import { useModals } from '../../hooks/usemodals';
 import { stringToDataHexString, dataHexStringToString } from '../../utils/bytes';
 import { useAppState } from "../../hooks/useappstate";
 
-const NewAsk = () => {
+const NewAsk = ({currentHandle}: {currentHandle: string}) => {
     const { pushModal, popModal, popAllModals } = useModals();
     const context = useWeb3React<Web3Provider>()
     const { Asks } = useAppState();
@@ -29,8 +29,6 @@ const NewAsk = () => {
             contract?.removeAllListeners();
         }
     }, [contract]);
-
-    const [currentHandle, setCurrentHandle] = useState<string>('');
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
@@ -59,20 +57,14 @@ const NewAsk = () => {
     return(
         <div>
             <form onSubmit={handleSubmit}>
+                <textarea className="textarea" name="description" defaultValue="An NFT of ..."></textarea>
                 <div>
-                    <label htmlFor="handle">Handle</label>
-                    <input type="text" id="handle" name="handle" onChange={e=> { 
-                        setCurrentHandle(e.target.value);
-                    }} value={currentHandle} />
-                </div>
-                <textarea name="description" defaultValue="An NFT of ..."></textarea>
-                <div>
-                    <label htmlFor="token">Token <br />(Default Kovan WETH)<br /></label>
-                    <input type="text" id="token" name="token" defaultValue="0xd0A1E359811322d97991E03f863a0C30C2cF029C" />
+                    <label className="label" htmlFor="token">Token <br />(Default Kovan WETH)<br /></label>
+                    <input className="input" type="text" id="token" name="token" defaultValue="0xd0A1E359811322d97991E03f863a0C30C2cF029C" />
                 </div>
                 <div>
-                    <label htmlFor="amount">Amount</label>
-                    <input type="number" id="amount" name="amount" defaultValue="0.00001" />
+                    <label className="label" htmlFor="amount">Amount</label>
+                    <input className="input" type="number" id="amount" name="amount" defaultValue="0.00001" />
                 </div>
                 <button type="submit">Send</button>
             </form>

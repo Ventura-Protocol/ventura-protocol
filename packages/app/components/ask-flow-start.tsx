@@ -6,7 +6,7 @@ import { useModals } from '../hooks/usemodals';
 import NewAsk from './form/new-ask';
 import Button from './button';
 import Avatar from './avatar';
-import { Padding, Flex } from './layout-helpers';
+import { Padding, Flex, CloseText } from './layout-helpers';
 
 const StyledAskBox = styled.div`
     padding: 10px;
@@ -48,6 +48,7 @@ const StyledHandleDropdown = styled.div`
 
 const ProfileItem = styled(Flex)`
     margin: 0px -10px;
+    cursor: pointer;
     &:hover {
         color: #FFFFFF;
         background-color: #5b00ff;
@@ -61,10 +62,10 @@ const ProfileItem = styled(Flex)`
 const ModalContent = () => {
     const { popModal } = useModals();
     return(
-        <Fragment>
-            <div onClick={popModal}>test modal content (click to close)</div>
+        <div style={{position:'relative', paddingTop: '10px'}}>
+            <CloseText onClick={popModal}>close X</CloseText>
             <NewAsk />
-        </Fragment>
+        </div>
     )
 }
 
