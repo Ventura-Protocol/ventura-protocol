@@ -233,8 +233,8 @@ function getErrorMessage(error: Error) {
                 const currentConnector = connectorsByName[name]
                 const activating = currentConnector === activatingConnector
                 const connected = currentConnector === connector
-                const disabled = !triedEager || !!activatingConnector || connected || !!error
-    
+                const disabled = !!activatingConnector || connected || !!error
+                console.log(triedEager, activatingConnector, connected, error)
                 return (
                 <Button
                     disabled={disabled}
@@ -295,46 +295,31 @@ function getErrorMessage(error: Error) {
             }}
             >
             {!!(connector === connectorsByName[ConnectorNames.Network] && chainId) && (
-                <button
-                style={{
-                    height: '3rem',
-                    borderRadius: '1rem',
-                    cursor: 'pointer'
-                }}
+                <Button
                 onClick={() => {
                     ;(connector as any).changeChainId(chainId === 1 ? 4 : 1)
                 }}
                 >
                 Switch Networks
-                </button>
+                </Button>
             )}
             {connector === connectorsByName[ConnectorNames.WalletConnect] && (
-                <button
-                style={{
-                    height: '3rem',
-                    borderRadius: '1rem',
-                    cursor: 'pointer'
-                }}
+                <Button
                 onClick={() => {
                     ;(connector as any).close()
                 }}
                 >
                 Kill WalletConnect Session
-                </button>
+                </Button>
             )}
             {connector === connectorsByName[ConnectorNames.WalletLink] && (
-                <button
-                style={{
-                    height: '3rem',
-                    borderRadius: '1rem',
-                    cursor: 'pointer'
-                }}
+                <Button
                 onClick={() => {
                     ;(connector as any).close()
                 }}
                 >
                 Kill WalletLink Session
-                </button>
+                </Button>
             )}
         </div>
       </StyledWalletComponents>

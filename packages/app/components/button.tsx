@@ -9,7 +9,10 @@ const StyledButton = styled.button`
     &:hover {
         background-color: rgb(240,240,240,1);
     }
-
+    &:disabled {
+        background: #eeeeee;
+        color: #cccccc
+      }
     position: relative;
     padding: 8px 12px;;
     font-size: 1rem;
@@ -27,19 +30,10 @@ const StyledButton = styled.button`
         )}")`}
 `;
 
-const InnerBox = styled.div`
-    // position: absolute;
-    // top: 2px;
-    // left: 2px;
-    // right: 2px;
-    // bottom: 2px;
-    // border: ${({dark})=>!dark ? `1px solid white`:`1px solid #5b00ff`};
-`
 
 const Button = ({size, dark, children, ...rest} : {size: number, dark: boolean, children: any}) => {
     return(
         <StyledButton dark={dark} {...rest}>
-            <InnerBox dark={dark}></InnerBox>
             {children}
         </StyledButton>
     )

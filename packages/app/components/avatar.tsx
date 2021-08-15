@@ -8,14 +8,15 @@ const Avatar = ({multiHandle, size = 50} : { multiHandle: string, size?: number 
     const network = multiHandle.split(':')[0];
 
     useEffect(()=>{
+        let onComplete = setImageUrl;
         if (network === 'TW') {
             const url = `https://cllv3zck15.execute-api.eu-west-1.amazonaws.com/dev/embed?url=https://www.twitter.com/${handle}`;
             
             fetch(url).then(response => response.json())
-            .then(({imagePath}) => setImageUrl(imagePath))
+            .then(({imagePath}) => onComplete(imagePath))
             .catch(console.error);
         }
-
+        return () => { onComplete = (noop)=>noop; }
     },[handle]);
     
     const style = {

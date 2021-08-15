@@ -19,13 +19,6 @@ const StyledAskBox = styled.div`
 
 `;
 
-const Input = styled.input`
-    padding: 8px;
-    height: 37px;
-    border: 1px solid #5b00ff;
-    width: 100%;
-`;
-
 const Title = styled.h2`
     font-family: 'Permanent Marker', monospace;
     font-size: 30px;
@@ -59,12 +52,12 @@ const ProfileItem = styled(Flex)`
     }
 `;
 
-const ModalContent = () => {
+const ModalContent = (props: any) => {
     const { popModal } = useModals();
     return(
         <div style={{position:'relative', paddingTop: '10px'}}>
             <CloseText onClick={popModal}>close X</CloseText>
-            <NewAsk />
+            <NewAsk currentHandle={props.handle} />
         </div>
     )
 }
@@ -73,11 +66,11 @@ const HandleDropdown = (props: any) => {
     const cleanHandle = props.handle.replace('@', '');
     return(
             <StyledHandleDropdown>
-                <ProfileItem style={{alignItems: 'center', borderBottom: '1px dotted black', padding: '10px'}}>
+                <ProfileItem style={{alignItems: 'center', borderBottom: '1px dotted black', padding: '10px'}} onClick={()=>props.onCallback('TW')} >
                     <Avatar multiHandle={`TW:${cleanHandle}`} />
                     <div style={{marginLeft: '10px'}}>{props.handle} on Twitter</div>
                 </ProfileItem>
-                <ProfileItem style={{alignItems: 'center', padding: '10px'}}>
+                <ProfileItem style={{alignItems: 'center', padding: '10px'}} onClick={()=>props.onCallback('IG')}>
                     <Avatar multiHandle={`IG:${cleanHandle}`} />
                     <div style={{marginLeft: '10px'}}>{props.handle} on Instagram</div>
                 </ProfileItem>
@@ -87,15 +80,16 @@ const HandleDropdown = (props: any) => {
 
 const AskFlowStart = () => {
     const { pushModal } = useModals();
-    const [handle, setHandle] = useState();
+    const [handle, setHandle] = useState('');
     const [debouncedHandle, setDebouncedHandle] = useState();
     const [timeoutId, setTimeoutId] = useState();
-
+    const [socialNetwork, setSocialNetwork] = useState();
 
     useEffect(()=> {
         clearTimeout(timeoutId);
         const id = setTimeout(()=>setDebouncedHandle(handle), 1000);
         setTimeoutId(id);
+        return () => clearTimeout(timeoutId)
     }, [handle])
 
     return (
@@ -107,13 +101,15 @@ const AskFlowStart = () => {
                 <Flex style={{alignItems: 'center'}}>
                     <label htmlFor="handle">Asking</label>
                     <div style={{position: 'relative', marginLeft: '10px', zIndex: handle ? 10 : 0}}>
-                        <Input name="handle" id="handle" type="text" placeholder="@handle" value={handle} onChange={e=>setHandle(e.target.value)}></Input>
-                        {handle && debouncedHandle && <HandleDropdown handle={debouncedHandle} />}
+                        <input className="input" autoComplete="off" name="handle" id="handle" type="text" placeholder="@handle" value={handle} onChange={
+                            e=> { setHandle(e.target.value); setSocialNetwork(undefined) }
+                        }></input>
+                        {handle && debouncedHandle && !socialNetwork && <HandleDropdown handle={debouncedHandle} onCallback={(network)=>{setSocialNetwork(network);console.log('oncallback')}} />}
                     </div>
                 </Flex>
                 <div style={{marginLeft: 'auto'}}>
-                    <Button dark onClick={
-                    ()=>pushModal(<ModalContent />, { overlay: true })}>Modal open</Button>
+                    <Button dark disabled={!socialNetwork || !debouncedHandle} onClick={
+                    ()=>pushModal(<ModalContent handle={`${socialNetwork}:${debouncedHandle}`} />, { overlay: true })}>Continue</Button>
                 </div>
             </Content>
 
