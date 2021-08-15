@@ -246,6 +246,11 @@ input, select, textarea {
   }
 }
 
+table, th, td {
+  border: 1px solid black;
+  padding:3px;
+}
+
 `
 
 function MyApp({ Component, pageProps }: AppProps) {

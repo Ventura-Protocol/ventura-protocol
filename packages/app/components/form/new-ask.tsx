@@ -7,6 +7,7 @@ import { useContract } from '../../hooks/usecontracts'
 import { useModals } from '../../hooks/usemodals';
 import { stringToDataHexString, dataHexStringToString } from '../../utils/bytes';
 import { useAppState } from "../../hooks/useappstate";
+import Button from '../button';
 
 const NewAsk = ({currentHandle}: {currentHandle: string}) => {
     const { pushModal, popModal, popAllModals } = useModals();
@@ -58,21 +59,15 @@ const NewAsk = ({currentHandle}: {currentHandle: string}) => {
             <form onSubmit={handleSubmit}>
                 <textarea className="textarea" name="description" defaultValue="An NFT of ..."></textarea>
                 <div>
-                    <label className="label" htmlFor="token">Token <br />(Default Kovan WETH)<br /></label>
+                    <label className="label" htmlFor="token">Token <br />(Default WETH)<br /></label>
                     <input className="input" type="text" id="token" name="token" defaultValue="0xd0A1E359811322d97991E03f863a0C30C2cF029C" />
                 </div>
                 <div>
                     <label className="label" htmlFor="amount">Amount</label>
                     <input className="input" type="number" id="amount" name="amount" defaultValue="0.00001" />
                 </div>
-                <button type="submit">Send</button>
+                <Button type="submit">Send</Button>
             </form>
-            <button onClick={
-                ()=>pushModal(<div onClick={popModal}>test modal content (click to close)</div>, { overlay: true })
-            }>Modal open</button>
-
-            
-            <button onClick={()=>Asks.set(current=> (['new', ...current]))}>Add</button>
 
         </div>
     )

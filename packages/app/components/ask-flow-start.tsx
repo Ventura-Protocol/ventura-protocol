@@ -7,6 +7,7 @@ import NewAsk from './form/new-ask';
 import Button from './button';
 import Avatar from './avatar';
 import { Padding, Flex, CloseText } from './layout-helpers';
+import CovalentCreditCheck from './covalent-credit-check';
 
 const StyledAskBox = styled.div`
     padding: 10px;
@@ -53,6 +54,20 @@ const ProfileItem = styled(Flex)`
 `;
 
 const ModalContent = (props: any) => {
+    const { popModal, pushModal } = useModals();
+    return(
+        <div style={{position:'relative', paddingTop: '10px'}}>
+            <CloseText onClick={popModal}>close X</CloseText>
+            {/* <NewAsk currentHandle={props.handle} /> */}
+            <CovalentCreditCheck continueCallback={()=>{
+                popModal();
+                pushModal(<ModalContent2 handle={props.handle} />, { overlay: true });
+            }} />
+        </div>
+    )
+}
+
+const ModalContent2 = (props: any) => {
     const { popModal } = useModals();
     return(
         <div style={{position:'relative', paddingTop: '10px'}}>
@@ -111,6 +126,8 @@ const AskFlowStart = () => {
                     <Button dark disabled={!socialNetwork || !debouncedHandle} onClick={
                     ()=>pushModal(<ModalContent handle={`${socialNetwork}:${debouncedHandle}`} />, { overlay: true })}>Continue</Button>
                 </div>
+                <Button onClick={
+                    ()=>pushModal(<ModalContent handle={`${socialNetwork}:${debouncedHandle}`} />, { overlay: true })}>Test</Button>
             </Content>
 
         
