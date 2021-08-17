@@ -63,7 +63,7 @@ const Flex = styled.div`
     display: flex;
 `;
 
-const ContentWrap = styled.p`
+const ContentWrap = styled.div`
     overflow: hidden;
     white-space: break-spaces;
     text-overflow: ellipsis;
@@ -151,7 +151,6 @@ const AsksList = () => {
             return(
             <div key={each.txHash}>
                 <Link href={`/${each.handle}/${each.id}`}>
-                    <a>
                     <StyledAsk>
                         <Flex>
                             <div style={{borderRight: '1px solid black', paddingRight: '5px', marginRight: '5px'}}>
@@ -173,9 +172,7 @@ const AsksList = () => {
                                 <Avatar multiHandle={each.handle} />
                             </div>
                         </Flex>
-
                     </StyledAsk>
-                    </a>
                 </Link>
                 <Divider></Divider>
             </div>
