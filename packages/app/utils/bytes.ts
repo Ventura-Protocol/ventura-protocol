@@ -1,4 +1,5 @@
-import { hexlify, arrayify, zeroPad } from '@ethersproject/bytes'
+import { hexlify, arrayify, zeroPad } from '@ethersproject/bytes';
+import CID from 'cids';
 const stringToDataHexString = (str: string) => {
     const codes = str.split('').map(l=>{ 
         const c = l.charCodeAt(0);
@@ -16,7 +17,15 @@ const dataHexStringToString = (dataHexString: string, strictSanitize: boolean = 
     return str;
 }
 
+const cidToHexString = (cid: string) => 
+    hexlify(new CID(cid).multihash.slice(2))
+
+const hexStringToCid = (hex: string) => 
+    new CID(Uint8Array.from([18, 32, ...arrayify(hex)])).toV1().toString('base32')
+
 export {
     stringToDataHexString,
     dataHexStringToString,
+    cidToHexString,
+    hexStringToCid,
 }

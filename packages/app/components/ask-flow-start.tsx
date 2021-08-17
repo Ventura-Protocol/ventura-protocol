@@ -102,7 +102,7 @@ const AskFlowStart = () => {
 
     useEffect(()=> {
         clearTimeout(timeoutId);
-        const id = setTimeout(()=>setDebouncedHandle(handle), 1000);
+        const id = setTimeout(()=>setDebouncedHandle(handle.replace('@','')), 1000);
         setTimeoutId(id);
         return () => clearTimeout(timeoutId)
     }, [handle])
@@ -126,8 +126,6 @@ const AskFlowStart = () => {
                     <Button dark disabled={!socialNetwork || !debouncedHandle} onClick={
                     ()=>pushModal(<ModalContent handle={`${socialNetwork}:${debouncedHandle}`} />, { overlay: true })}>Continue</Button>
                 </div>
-                <Button onClick={
-                    ()=>pushModal(<ModalContent handle={`${socialNetwork}:${debouncedHandle}`} />, { overlay: true })}>Test</Button>
             </Content>
 
         

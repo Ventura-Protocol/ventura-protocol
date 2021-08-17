@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Svg from './svg-patterns';
 import { encode } from "universal-base64";
 import Image from 'next/image'
+import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import { useAppState } from "../hooks/useappstate";
@@ -14,6 +15,20 @@ import { dataHexStringToString } from '../utils/bytes';
 import AskFlowStart from './ask-flow-start';
 import { tokenForAddress } from '../utils/tokens';
 import Avatar from './avatar';
+import FilecoinContent from './filecoin-content';
+
+const APIURL = "https://api.studio.thegraph.com/query/6030/venturapledges/v0.0.1";
+
+const asksQuery = `
+  query($first: Int) {
+    asks(first: $first) {
+        handle
+        cid
+        token
+        index
+    }
+  }
+`;
 
 const StyledAsksList = styled.div`
     width: 100%;
@@ -68,6 +83,42 @@ const AsksList = () => {
     const { Asks, TxHashes } = useAppState();
     const contract = useContract(contractsInfo.contracts.Pledges.address, contractsInfo.contracts.Pledges.abi);
     useEffect(()=>{
+
+        const client = new ApolloClient({
+            uri: APIURL,
+            cache: new InMemoryCache()
+          });
+          
+          client.query({
+            query: gql(asksQuery),
+            variables: {
+                first: 10,
+              }
+          })
+          .then(data => {
+                const { asks } = data.data;
+                if (asks.length > 0) {
+                    asks.forEach(ask => {
+                        const newAsk = {
+                            txHash: ask.handle + ask.index,
+                            handle: dataHexStringToString(ask.handle),
+                            cid: ask.cid,
+                            token: ask.token,
+                            id: ask.index,
+                            chainId
+                        };
+                        const includesTx = TxHashes.itself.has(ask.handle + ask.index);
+                        if (!includesTx) {
+                            Asks.set(current => {
+                                TxHashes.itself.add(ask.handle + ask.index);
+                                return ([newAsk,...current]);
+                            });
+                        }
+                    })
+                }
+          })
+          .catch(err => { console.log("Error fetching data: ", err) });
+
         contract?.on('AskSet', (handle,cid,token,id,fullEvent)=> {
             const decodedHandle = dataHexStringToString(handle);
             const newAsk = {
@@ -115,7 +166,7 @@ const AsksList = () => {
                             <div>
                                 <p>Asking <strong style={{fontWeight: 'bold'}}>@{each.handle.split(':')[1]}</strong> for</p>
                                 <ContentWrap>
-                                    {'content:' + each.cid + each.cid}
+                                    <FilecoinContent cid={each.cid} />
                                 </ContentWrap>
                             </div>
                             <div style={{marginLeft: 'auto'}}>

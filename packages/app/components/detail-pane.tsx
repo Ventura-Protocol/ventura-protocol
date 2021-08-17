@@ -14,6 +14,7 @@ import Avatar from './avatar';
 import { tokenForAddress } from '../utils/tokens';
 import { useWeb3React } from '@web3-react/core'
 import { formatEther } from '@ethersproject/units'
+import FilecoinContent from './filecoin-content';
 
 const StyledDetailPane = styled.div`
     width: 100%;
@@ -63,8 +64,12 @@ const DetailPane = () => {
     const handle = path && path[0];
     const askSequence = path && path[1];
     const contract = useContract(contractsInfo.contracts.Pledges.address, contractsInfo.contracts.Pledges.abi);
-    
+
     useEffect(()=>{
+        if (window) {
+            window.c = contract;
+        }
+        // console.log(path, stringToDataHexString(handle))
         if (contract && path) {
             contract?.getAsk(
                 stringToDataHexString(handle),
@@ -100,10 +105,10 @@ const DetailPane = () => {
                                 <div>
                                     <p>Asking <strong style={{fontWeight: 'bold'}}>@{handle.split(':')[1]}</strong> for</p>
                                     <AskContent>
-                                        {'content:' + ask.cid + ask.cid}
+                                        <FilecoinContent cid={ask.cid} />
                                     </AskContent>
                                     <p style={{marginTop: '20px'}}>Total Pledges: {ask.totalPledges}</p>
-                                    <p>Total Amount: {formatEther(ask.totalAmount.toNumber())}</p>
+                                    {/* <p>Total Amount: {formatEther(ask.totalAmount.toNumber())}</p> */}
                                     <Button onClick={handleAddPledge} style={{marginTop: '20px'}}>Add Pledge</Button>
                                 </div>
                                 <div style={{marginLeft: 'auto'}}>

@@ -6,9 +6,26 @@ import { formatEther, parseUnits, commify } from '@ethersproject/units'
 import contractsInfo from '../../contracts/contractsInfo.json';
 import { useContract } from '../../hooks/usecontracts'
 import { useModals } from '../../hooks/usemodals';
-import { stringToDataHexString, dataHexStringToString } from '../../utils/bytes';
+import { stringToDataHexString, dataHexStringToString, cidToHexString } from '../../utils/bytes';
 import { useAppState } from "../../hooks/useappstate";
 import Button from '../button';
+import { Web3Storage } from 'web3.storage'
+
+function makeStorageClient() {
+    return new Web3Storage({ token: process.env.WEB3STORAGE_TOKEN})
+  }
+
+const client = makeStorageClient();
+
+function makeFileObjects(content: string) {
+    const obj = { 'untrusted-content': content}
+    const blob = new Blob([JSON.stringify(obj)], {type : 'application/json'})
+  
+    const files = [
+      new File([blob], 'untrusted-content.json')
+    ]
+    return files
+  }
 
 const Title = styled.h2`
     font-family: 'Permanent Marker', monospace;
@@ -50,16 +67,22 @@ const NewAsk = ({currentHandle}: {currentHandle: string}) => {
         }
 
         const handle = stringToDataHexString(currentHandle) //bytes32
-        const cid = '0x2400000000000000000000000000000000000000000000000000000000000000'; //bytes32
 
-        contract?.addAsk(
-                handle,
-                cid,
-                askFormValues.token,
-                askFormValues.amount,
-            )
+        /// uploading to filecoin
+        const files = makeFileObjects(askFormValues.description)
+            
+        client.put(files)
+        .then(fullCid => cidToHexString(fullCid)) //bytes32
+        .then(cid => {
+            return contract?.addAsk(
+                    handle,
+                    cid,
+                    askFormValues.token,
+                    askFormValues.amount,
+                )
+            })
         .then((transactionResponse: TransactionResponse)=> transactionResponse.wait())
-        .then((res: TransactionReceipt) => alert('Transaction was mined'))
+        .then((res: TransactionReceipt) => popModal())
         .catch(console.error);
     }
 
@@ -95,7 +118,7 @@ const NewAsk = ({currentHandle}: {currentHandle: string}) => {
                 </div>
                 <div>
                     <label className="label" htmlFor="amount">Amount</label>
-                    <input className="input" type="number" id="amount" name="amount" defaultValue="0.3" onChange={handleAmountChange} />
+                    <input className="input" step="any" min="0" type="number" id="amount" name="amount" defaultValue="0.3" onChange={handleAmountChange} />
                 </div>
                 <Button style={{float:'right', marginTop:'10px'}} type="submit">Send Transaction</Button>
             </form>
