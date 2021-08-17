@@ -138,7 +138,7 @@ const NewAsk = ({currentHandle}: {currentHandle: string}) => {
                 </thead>
                 <tbody>
                     {rewardsTable.map((row, i)=>(
-                        <tr>
+                        <tr key={i}>
                             <td>{i + 1}</td>
                             <td>${commify(row.at_1k.toFixed(0))}</td>
                             <td>${commify(row.at_10k.toFixed(0))}</td>

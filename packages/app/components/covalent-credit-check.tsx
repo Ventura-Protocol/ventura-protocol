@@ -53,10 +53,10 @@ const CovalentCreditCheck = (props: any) => {
                     <th>Balance 24h</th>
                 </thead>
                 <tbody>
-                    {supportedTokens && supportedTokens.map(each=>{
+                    {supportedTokens && supportedTokens.map((each, i)=>{
 
                             return(
-                                <tr>
+                                <tr key={i}>
                                     <td>{each.contract_ticker_symbol}</td>
                                     <td>{FixedNumber.from(formatUnits(BigNumber.from(each.balance), each.contract_decimals)).round(4).toString()}</td>
                                     <td>{FixedNumber.from(formatUnits(BigNumber.from(each.balance_24h), each.contract_decimals)).round(4).toString()}</td>
