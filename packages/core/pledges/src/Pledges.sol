@@ -1,12 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.7.6;
 
-import "./safemath.sol";
-
 contract Pledges {
-
-    using SafeMath32 for uint32; // in case there's overflow in asks
-
     struct Pledge {
         address addr;
         uint amount;
@@ -76,7 +71,7 @@ contract Pledges {
         uint totalAmount = handles[_handle].asks[_ask].totalAmount;
         uint32 pledgeIndex;
         
-        // if pledge already exists from this address, they can only increase the amount on existing pledge
+        // if pledge already exist from this address, they can only increase the amount on existing pledge
         if (handles[_handle].asks[_ask].pledgesByAddress[msg.sender] == 0) {
             pledgeIndex = totalPledges + 1;
         } else {
