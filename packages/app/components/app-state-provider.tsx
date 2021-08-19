@@ -5,8 +5,10 @@ const { Provider } = AppStateContext;
 const AppStateProvider = ({ children, entities = {} }) => {
     const storage = [];
     const entityKeys = Object.keys(entities);
+    
     for (const key of entityKeys) {
         const initialValue = entities[key];
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         storage.push(useState(initialValue));
     }
     const contextValue = storage.reduce((acc, eachStorage, i) => ({ 

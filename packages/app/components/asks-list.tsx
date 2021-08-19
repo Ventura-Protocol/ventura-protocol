@@ -17,13 +17,13 @@ import { tokenForAddress } from '../utils/tokens';
 import Avatar from './avatar';
 import FilecoinContent from './filecoin-content';
 
-const APIURL = "https://api.studio.thegraph.com/query/6030/venturapledges/v0.0.1";
+const APIURL = "https://api.studio.thegraph.com/query/6030/venturapledges/v0.0.3";
 
 const asksQuery = `
   query($first: Int) {
     asks(first: $first) {
-        handle
         cid
+        handle
         token
         index
     }
@@ -111,7 +111,7 @@ const AsksList = () => {
                         if (!includesTx) {
                             Asks.set(current => {
                                 TxHashes.itself.add(ask.handle + ask.index);
-                                return ([newAsk,...current]);
+                                return ([...current, newAsk]);
                             });
                         }
                     })
@@ -142,15 +142,15 @@ const AsksList = () => {
             contract?.removeAllListeners();
         }
     }, [contract]);
-
+    
     return(
       <StyledAsksList>
         <AskFlowStart />
-        {Asks.itself.map(each => {
+        {Asks.itself.reverse().map(each => {
             const token = tokenForAddress(each.token, each.chainId)
             return(
             <div key={each.txHash}>
-                <Link href={`/${each.handle}/${each.id}`}>
+                <Link passHref href={`/${each.handle}/${each.id}`}>
                     <StyledAsk>
                         <Flex>
                             <div style={{borderRight: '1px solid black', paddingRight: '5px', marginRight: '5px'}}>

@@ -110,6 +110,7 @@ const NewAsk = ({currentHandle}: {currentHandle: string}) => {
 
     return(
         <div style={{maxWidth: '500px'}}>
+            <p>Asking: {currentHandle}</p>
             <form onSubmit={handleSubmit}>
                 <textarea className="textarea" name="description" defaultValue="Your personal early drafts of Filecoin investor pitches and decks (Encrypted PDF)"></textarea>
                 <div>

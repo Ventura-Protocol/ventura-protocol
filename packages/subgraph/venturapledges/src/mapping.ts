@@ -28,6 +28,7 @@ export function handleAskSet(event: AskSet): void {
   entity.cid = event.params.cid
   entity.token = event.params.token
   entity.index = event.params.id
+  entity.id = event.params.handle.toString() + event.params.id.toString()
 
   // Entities can be written to the store with `.save()`
   entity.save()
